@@ -23,21 +23,23 @@ pre_process <- function(data) data %>%
          life.stage = replace_na(life.stage, "Adult"), # blank life-stage entries get filled as Adult
          sex = replace_na(sex, "Unknown"), # blank sex entries get filled as Unknown
          iso = case_when(iso<=50 ~ iso), # Exclude images that were not pre-classified
-         cam = factor(cam, levels = paste0("JR-C",1:25)), # order camera levels correctly
+         cam = factor(cam, levels = paste0("JR-C",1:25), labels = paste0("JR-C",str_pad(1:25, 2, pad = 0))), # order camera levels correctly
          date.time = ymd_hms(date.time, tz = "Australia/Queensland")) %>% # use QLD tz because no daylight saving
   arrange(cam, date.time)
-
-
+   
 
 add_geometry <- function(x) x %>% 
   sf::st_as_sf(coords = c("lon","lat"), crs = 4326) %>%  # 4326 is the EPS code for WS84
   sf::st_transform(crs = 32755) %>% # 32755 is the EPS code for UTM zone 55S (South) 
-  mutate(X= sf::st_coordinates(geometry)[,"X"],
-         Y= sf::st_coordinates(geometry)[,"Y"])
+  mutate(lat = x$lat,
+         lon = x$lon,
+         x= sf::st_coordinates(geometry)[,"X"],
+         y= sf::st_coordinates(geometry)[,"Y"],
+)
 
 
 process_op_days <- function(op_data) op_data %>% 
-  transmute(cam = camera, 
+  transmute(cam = factor(camera, levels = paste0("JR-C",1:25), labels = paste0("JR-C",str_pad(1:25, 2, pad = 0))), 
             start_date = dmy(s0.date),
             end_date = start_date + days(s1.rd)) %>% 
   drop_na %>% # remove cameras with no run days
