@@ -21,8 +21,6 @@ theme_set(theme_classic())
 #source("camelot_analysis_func.r")
 source("99_functions.R")
 
-
-
 jr_raw <- read_csv("data/survey-export_2022-02-25_1551.csv")
 jr_obs <- pre_process(jr_raw)
 
