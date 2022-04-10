@@ -19,15 +19,19 @@ theme_set(theme_classic())
 #species_sub1 <- c("Tasmanian Devil", "cat", "Bennett's Wallaby", 
 #                  "Tasmanian Pademelon", "Spotted-tail Quoll")  
 
+# directory stuff
 run_date <- "2022_04_11"
 run_id <- ""
-save_dir <- paste0("results/m_",run_date,"_",run_id);save_dir
-fit <- readRDS(paste0(save_dir,"/fit_",run_date,".rds"))
+save_dir <- paste0("results/m_",run_date,"_",run_id) # git ignored
+plot_dir <- paste0("plots/model_runs/",run_date) # git visible
+if(!dir.exists(plot_dir)) dir.create(plot_dir)
 
+# load fit
+fit <- readRDS(paste0(save_dir,"/fit_",run_date,".rds"))
 summary(fit)
 
 # select model: alpha (detection) or beta (occupancy) model
-var_type <- "beta"
+var_type <- "alpha"
 
 c("Devil","Cat", "Wallaby","Pademelon","Quoll") %>% 
   map(~ fit[[paste0(var_type,".samples")]] %>% 
@@ -41,7 +45,7 @@ c("Devil","Cat", "Wallaby","Pademelon","Quoll") %>%
   annotate_figure(top = paste(if_else(var_type=="alpha", "Detection","Occupancy"), "model") %>% 
                     text_grob(size = 14, face = "bold"))
 
-#ggsave(paste0(save_dir,"/plot_",if_else(var_type=="alpha", "Detection","Occupancy"),".jpg"))
+#ggsave(paste0(plot_dir,"/est_",if_else(var_type=="alpha", "Detection","Occupancy"),".jpg"))
 
 
 
