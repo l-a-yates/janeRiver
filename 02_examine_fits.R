@@ -46,7 +46,8 @@ c("Devil","Cat", "Wallaby","Pademelon","Quoll") %>%
                     text_grob(size = 14, face = "bold"))
 
 #ggsave(paste0(plot_dir,"/est_",if_else(var_type=="alpha", "Detection","Occupancy"),".jpg"))
-
+ unmarked::occuMulti()
+ unmarked::
 
 
 

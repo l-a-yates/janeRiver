@@ -39,7 +39,8 @@ add_geometry <- function(x) x %>%
 
 
 process_op_days <- function(op_data) op_data %>% 
-  transmute(cam = factor(camera, levels = paste0("JR-C",1:25), labels = paste0("JR-C",str_pad(1:25, 2, pad = 0))), 
+  transmute(cam = factor(camera, levels = paste0("JR-C",1:25), 
+                         labels = paste0("JR-C",str_pad(1:25, 2, pad = 0))), 
             start_date = dmy(s0.date),
             end_date = start_date + days(s1.rd)) %>% 
   drop_na %>% # remove cameras with no run days
